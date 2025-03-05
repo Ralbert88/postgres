@@ -49,7 +49,7 @@ show_menu() {
     echo "21. Lock Wait                                   |"
     echo "22. Verificar uso de Tablespace                 |"
     echo "23. Verifica transações XA                      |"
-    echo "24. Cancelar/Matar uma Sessão (co-)             |"
+    echo "24. Cancelar/Matar uma Sessão 30min+            |"
     echo "25. Verificar Replicação                        |"
     echo "0. Sair do menu                                 |"
     echo "------------------------------------------------|"
@@ -213,7 +213,7 @@ run_query() {
             echo "Listando sessões com mais de 30 minutos..."
             QUERY="SELECT pid, usename, datname, query, query_start
                    FROM pg_stat_activity
-                   WHERE now() - query_start > interval '30 minutes' and usename like '%co-%';"
+                   WHERE now() - query_start > interval '30 minutes';"
             psql -d "$DB_NAME" -p "$DB_PORT" -c "$QUERY"
             echo -n "Digite o PID para matar ou pressione ENTER para cancelar: "
             read -r PID
@@ -224,7 +224,7 @@ run_query() {
                 echo "Operação cancelada."
             fi
             return
-            ;; ## coloque no like o usuario que não deve ficar pendurado a mais de 30 minutos, meu exemplo user co
+            ;; 
 
                 25)echo "Verificar Replicação"
                 QUERY="SELECT application_name, client_addr, state, sync_state, sent_lsn, write_lsn, flush_lsn, replay_lsn,
