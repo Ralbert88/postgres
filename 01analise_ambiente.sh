@@ -61,8 +61,7 @@ run_query() {
     case $1 in
         1)
             QUERY="SELECT query, calls, total_exec_time, mean_exec_time, rows
-                   FROM pg_stat_statements
-                   ORDER BY mean_exec_time DESC LIMIT 10;"
+                   FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 10;"
             ;;
         2)
             QUERY="SELECT bl.pid AS bloqueado_pid,ka.query AS query_bloqueante,bl_sa.query AS query_bloqueada,bl.mode AS tipo_lock
@@ -77,14 +76,12 @@ run_query() {
                    AND kl.classid IS NOT DISTINCT FROM bl.classid
                    AND kl.objid IS NOT DISTINCT FROM bl.objid
                    AND kl.objsubid IS NOT DISTINCT FROM bl.objsubid
-                   AND kl.pid != bl.pid
-                        JOIN pg_stat_activity ka ON kl.pid = ka.pid;"
+                   AND kl.pid != bl.pid JOIN pg_stat_activity ka ON kl.pid = ka.pid;"
             ;;
         3)
             QUERY="SELECT pid, usename, datname, state, backend_start, query_start, query
                    FROM pg_stat_activity
-                   WHERE state = 'active'
-                   AND now() - query_start > interval '30 minutes';"
+                   WHERE state = 'active' AND now() - query_start > interval '30 minutes';"
             ;;
         4)
             QUERY="SELECT pid, usename, datname, application_name, client_addr, state, query_start, query
@@ -117,13 +114,11 @@ run_query() {
             ;;
         8)
             QUERY="SELECT query, calls, total_exec_time, rows
-                   FROM pg_stat_statements
-                   ORDER BY calls DESC LIMIT 10;"
+                   FROM pg_stat_statements ORDER BY calls DESC LIMIT 10;"
             ;;
         9)
             QUERY="SELECT query, shared_blks_hit + shared_blks_read AS memoria_usada, calls
-                   FROM pg_stat_statements
-                   ORDER BY memoria_usada DESC LIMIT 10;"
+                   FROM pg_stat_statements ORDER BY memoria_usada DESC LIMIT 10;"
             ;;
         10)
             QUERY="SELECT query, total_exec_time / calls AS tempo_medio, calls, rows
